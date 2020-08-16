@@ -5,12 +5,12 @@ import { getCustomRepository } from 'typeorm';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
 
-// import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const appointmentsRouter = Router();
 
 // middleware
-// appointmentsRouter.use(ensureAuthenticated);
+appointmentsRouter.use(ensureAuthenticated);
 
 appointmentsRouter.get('/', async (request, response) => {
   const appointmentsRepository = getCustomRepository(AppointmentsRepository);
@@ -19,13 +19,13 @@ appointmentsRouter.get('/', async (request, response) => {
 });
 
 appointmentsRouter.post('/', async (request, response) => {
-  const { provider, date } = request.body;
+  const { provider_id, date } = request.body;
   const parseDate = parseISO(date);
 
   const createAppointment = new CreateAppointmentService();
   const appointment = await createAppointment.execute({
     date: parseDate,
-    provider,
+    provider_id,
   });
 
   return response.json(appointment);
